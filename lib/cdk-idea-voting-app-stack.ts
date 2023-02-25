@@ -1,16 +1,24 @@
 import * as cdk from 'aws-cdk-lib';
+import { RemovalPolicy } from 'aws-cdk-lib';
+import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class CdkIdeaVotingAppStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+        super(scope, id, props);
 
-    // The code that defines your stack goes here
-
-    // example resource
-    // const queue = new sqs.Queue(this, 'CdkIdeaVotingAppQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
-  }
+        // what do we need?
+        // API Gateway
+        // Cognito
+        // Several AWS Lambdas
+        // DynamoDb
+        const table = new Table(this, 'IdeasTable', {
+            billingMode: BillingMode.PAY_PER_REQUEST,
+            partitionKey: { name: 'pk', type: AttributeType.STRING },
+            sortKey: { name: 'sk', type: AttributeType.STRING },
+            removalPolicy: RemovalPolicy.DESTROY,
+            tableName: 'IdeasTable',
+        });
+        
+    }
 }
